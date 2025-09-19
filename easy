@@ -12,8 +12,10 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Mono installation
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
-    && echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | tee /etc/apt/sources.list.d/mono-official-stable.list \
+# modern gpg method instead of deprecated apt-key adv
+RUN wget https://download.mono-project.com/repo/xamarin.gpg -O- | gpg --dearmor > /usr/share/keyrings/mono-official.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/mono-official.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" \
+       | tee /etc/apt/sources.list.d/mono-official-stable.list \
     && apt-get update && apt-get install -y mono-devel \
     && rm -rf /var/lib/apt/lists/*
 
